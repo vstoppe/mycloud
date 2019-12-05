@@ -1,0 +1,22 @@
+version: '3'
+services:
+  # Source: https://hub.docker.com/r/mazzolino/tiddlywiki
+  tiddlywiki:
+    container_name: tiddlywiki
+    image: mazzolino/tiddlywiki
+    env_file:
+      - $HOSTNAME.env
+    environment:
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      - LETSENCRYPT_HOST=plugbrain.$DOMAIN
+      - VIRTUAL_HOST=plugbrain.$DOMAIN
+      - VIRTUAL_PORT=8080
+    volumes:
+      - $DATA/tiddlywiki:/var/lib/tiddlywiki
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external:
+      name: frontend
