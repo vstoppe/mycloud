@@ -1,0 +1,13 @@
+version: '3'
+services:
+  airconnect:
+    container_name: airconnect
+    image: 1activegeek/airconnect
+    networks:
+      pubnet:
+        ipv4_address: 10.1.1.12
+
+networks:
+  pubnet:
+    external:
+      name: pub_net
