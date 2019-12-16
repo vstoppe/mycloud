@@ -4,7 +4,7 @@ This is the git repo of my personal cloud server at home. All services are clean
 
 # Concept
 
-This repo is my workspace for docker ($WS_DOCKER). The data of the services is kept in the $DATA dir. With some environment variables and a generic systemd docker@.service file it is easy to manage this as an environment
+This repo is my workspace for docker ($WS_DOCKER). The data of the services is kept in the $DATA dir. With some environment variables and a generic systemd docker@.service file it is easy to manage this environment
 
 ## Environment variables
 
