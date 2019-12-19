@@ -3,11 +3,11 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
-    # We need to customize the base image to make changes persistant during reboots:
-    #build: .
     env_file:
       - ${HOST}.env
     environment:
+      # Without DNSMASQ_LISTENING=all dnsmasq does not answer to dns requests
+      - DNSMASQ_LISTENING=all 
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL
       - LETSENCRYPT_HOST=pihole.$DOMAIN
       - VIRTUAL_HOST=pihole.$DOMAIN
@@ -15,21 +15,16 @@ services:
       # We want this service not be accessible from the internet:
       - NETWORK_ACCESS=internal
     volumes:
+      # For general settings
+      - pihole_etc:/etc/pihole
       # List with own hosts entries (eg. for wpad / proxy autocnfig)
       - $WS_DOCKER/pihole/etc/pihole/lan.list:/etc/pihole/lan.list
-      # It is not possible to bind mount setupVars.conf: resource busy
-      # $WS_DOCKER/pihole/etc/pihole/setupVars.conf:/etc/pihole/setupVars.conf:rw
-      - pihole_etc:/etc/pihole
       # This files sources the lan.list
       - $WS_DOCKER/pihole/etc/dnsmasq.d/02-lan.conf:/etc/dnsmasq.d/02-lan.conf
-    dns:
-      - 10.1.1.1
-    cap_add:
-      - NET_ADMIN
     networks:
       frontend:
       pubnet:
-        ipv4_address: 10.1.1.4
+        ipv4_address: $ServerIP
 
 networks:
   frontend:
