@@ -1,0 +1,3 @@
+# Entry for privoxy wpad file distributon.  We need this entry 
+# for the clients to get their proxy configuration.
+10.1.1.6 wpad.fritz.box
