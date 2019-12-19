@@ -1,6 +1,6 @@
 # Sources
 
-[Pihole und Docker Hub](https://hub.docker.com/r/pihole/pihole)
+[Pi-hole on Docker Hub](https://hub.docker.com/r/pihole/pihole)
 
 # Setup
 
