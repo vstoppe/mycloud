@@ -16,9 +16,7 @@ services:
       - mailbox.$DOMAIN:$DOCKER_HOST_IP
     volumes:
         # Main folder needed for updating:
-        # Because it doesn't need backup I use a docker volume:
-        #- $DATA/nextcloud/html:/var/www/html
-      - nextcloud_html:/var/www/html
+      - $DATA/nextcloud/html:/var/www/html
         # local configuration
       - $DATA/nextcloud/config:/var/www/html/config
         # Installed / modified apps
@@ -52,8 +50,7 @@ services:
     image: nginx:mainline-alpine
     container_name: nextcloud_fe
     volumes:
-      #- $DATA/nextcloud/html:/var/www/html:ro
-      - nextcloud_html:/var/www/html:ro
+      - $DATA/nextcloud/html:/var/www/html:ro
       - $WS_DOCKER/nextcloud/etc/nginx.conf:/etc/nginx/nginx.conf
     environment:
       ### Virtual host
