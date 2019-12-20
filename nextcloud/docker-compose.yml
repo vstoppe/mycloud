@@ -11,7 +11,7 @@ services:
     environment:
       - REDIS_HOST=nextcloud_redis
     env_file:
-      - ./nextcloud.env
+      - ${HOSTNAME}.env
     extra_hosts:
       - mailbox.$DOMAIN:$DOCKER_HOST_IP
     volumes:
@@ -73,7 +73,7 @@ services:
     container_name: nextcloud_db
     image: percona:5.7
     env_file:
-      - nextcloud.env
+      - ${HOSTNAME}.env
     volumes:
       - $DATA/nextcloud/mysql/lib:/var/lib/mysql
       - $DATA/nextcloud/mysql/log:/var/log/mysql
