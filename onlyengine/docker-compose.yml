@@ -8,26 +8,18 @@ services:
     tty: true
     networks:
       - frontend
-      #- nextcloud_net
     environment:
      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
      - LETSENCRYPT_HOST=onlyengine.$DOMAIN
      - VIRTUAL_HOST=onlyengine.$DOMAIN
      - VIRTUAL_PORT=80
-     #expose:
-     #  - '80'
-     #  - '443'
     volumes:
        - $DATA/only_engine/data:/var/www/onlyoffice/Data
        - $DATA/only_engine/log:/var/log/onlyoffice
        - $DATA/only_engine/fonts:/usr/share/fonts/truetype/custom
        - $DATA/only_engine/forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten
 
-
 networks:
   frontend:
     external:
       name: frontend
-      #  nextcloud_net:
-      #    external:
-      #      name: nextcloud_nextcloud_net
