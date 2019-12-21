@@ -14,10 +14,10 @@ services:
      - VIRTUAL_HOST=onlyengine.$DOMAIN
      - VIRTUAL_PORT=80
     volumes:
-       - $DATA/only_engine/data:/var/www/onlyoffice/Data
-       - $DATA/only_engine/log:/var/log/onlyoffice
-       - $DATA/only_engine/fonts:/usr/share/fonts/truetype/custom
-       - $DATA/only_engine/forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten
+       - $DATA/onlyengine/data:/var/www/onlyoffice/Data
+       - $DATA/onlyengine/log:/var/log/onlyoffice
+       - $DATA/onlyengine/fonts:/usr/share/fonts/truetype/custom
+       - $DATA/onlyengine/forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten
 
 networks:
   frontend:
