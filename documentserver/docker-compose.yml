@@ -1,0 +1,33 @@
+version: '2.2'
+services:
+  document-server:
+    container_name: documentserver
+    image: documentserver:1804
+    stdin_open: true
+    tty: true
+    networks:
+      - frontend
+      #- onlyoffice
+      #- nextcloud_net
+    environment:
+     - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+     - LETSENCRYPT_HOST=onlyoffice-document-server.$DOMAIN
+     - VIRTUAL_HOST=onlyoffice-document-server.$DOMAIN
+     - VIRTUAL_PORT=80
+    expose:
+      - '80'
+    volumes:
+       - $DATA/onlyoffice/document_data:/var/www/onlyoffice/Data
+       - $DATA/onlyoffice/document_log:/var/log/onlyoffice
+       - $DATA/onlyoffice/document_fonts:/usr/share/fonts/truetype/custom
+       - $DATA/onlyoffice/document_forgotten:/var/lib/onlyoffice/documentserver/App_Data/cache/files/forgotten
+
+
+networks:
+  #onlyoffice:
+  frontend:
+    external:
+      name: frontend
+      #nextcloud_net:
+      #  external:
+      #    name: nextcloud_nextcloud_net

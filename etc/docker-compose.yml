@@ -1,0 +1,22 @@
+version: '3'
+services:
+  SERVICE:
+    container_name: SERVICE
+    image: 
+    env_file:
+      - SERVICE.env
+    environment:
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      - LETSENCRYPT_HOST=SERVICE.$DOMAIN
+      - VIRTUAL_HOST=SERVICE.$DOMAIN
+      - VIRTUAL_PORT=80
+      #- NETWORK_ACCESS=internal
+    volumes:
+      - $DATA/SERVICE/:/etc/SERVICE/
+    networks:
+      frontend:
+
+networks:
+  frontend:
+    external:
+      name: frontend
