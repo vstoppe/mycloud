@@ -9,7 +9,7 @@ services:
     mem_limit: 2048m
     mem_reservation: 512m
     environment:
-      - REDIS_HOST=nextcloud_redis
+      - REDIS_HOST=${SERVICE}_redis
     env_file:
       - ${HOSTNAME}.env
     extra_hosts:
@@ -22,12 +22,13 @@ services:
         # Installed / modified apps
       - $DATA/${SERVICE}/custom_apps:/var/www/html/custom_apps
         # the actual data of the Nextcloud: 
+      - /mnt/nextdata:/var/www/html/data
         #- $DATA/nextcloud/data:/var/www/html/data
         # themeing / branding
-      - $DATA/${SERVICE}/themes:/var/www/html/themes
+        #- $DATA/${SERVICE}/themes:/var/www/html/themes
 
         # the actual data of nextcloud
-      - $NEXTDATA:/var/www/html/data
+        #- $NEXTDATA:/var/www/html/data
         # private video folder:
       - $NEXTVIDEO:/mnt/videos:ro 
         # private audio file folder:
