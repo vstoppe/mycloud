@@ -1,0 +1,15 @@
+apporder
+calendar
+contacts
+files-external
+mail
+maps
+news
+nextbackup
+onlyoffice
+polls
+rainloop
+tasks
+rightclick
+deck
+notes

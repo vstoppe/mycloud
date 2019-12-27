@@ -1,0 +1,70 @@
+version: '2.2'
+services:
+
+  nextcloud:
+    container_name: ${SERVICE}
+    image: nextcloud:${VERSION}-apache
+    # If the mem_limit is not set nextcloud will grab as much memory as possible:
+    mem_limit: 2048m
+    mem_reservation: 512m
+    env_file:
+      - ${HOSTNAME}.env
+    environment:
+      ### MySQL configuration
+      - MYSQL_DATABASE=${SERVICE}
+      - MYSQL_HOST=${SERVICE}_db
+      - MYSQL_USER=next
+      ### Virtual host
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      - LETSENCRYPT_HOST=${SUBDOMAIN}.$DOMAIN
+      - VIRTUAL_HOST=${SUBDOMAIN}.$DOMAIN
+      - VIRTUAL_PORT=80
+    extra_hosts:
+      - mailbox.$DOMAIN:$DOCKER_HOST_IP
+    volumes:
+        # Main folder needed for updating:
+      - $DATA/${SERVICE}/html:/var/www/html
+        # local configuration
+      - $DATA/${SERVICE}/config:/var/www/html/config
+        # Installed / modified apps
+      - $DATA/${SERVICE}/custom_apps:/var/www/html/custom_apps
+        # the actual data of the Nextcloud: 
+        #- $DATA/${SERVICE}/data:/var/www/html/data
+        # themeing / branding
+      - $DATA/${SERVICE}/themes:/var/www/html/themes
+
+        # the actual data of nextcloud
+      - $NEXTDATA:/var/www/html/data
+        # private video folder:
+      - $NEXTVIDEO:/mnt/videos:ro 
+        # private audio file folder:
+      - $NEXTAUDIO:/mnt/audio:ro
+        # private music file folder:
+      - $NEXTMUSIC:/mnt/musik:ro
+    networks:
+      - frontend
+      - nextcloud_net
+    depends_on:
+      - nextcloud_db
+
+  nextcloud_db:
+    container_name: ${SERVICE}_db
+    image: percona:5.7
+    environment:
+      - MYSQL_DATABASE=${SERVICE}
+      - MYSQL_USER=next
+    env_file:
+      - ${HOSTNAME}.env
+    volumes:
+      - $DATA/${SERVICE}/mysql/lib:/var/lib/mysql
+      - $DATA/${SERVICE}/mysql/log:/var/log/mysql
+      - $WS_DOCKER/${SERVICE}/my.cnf.d:/etc/my.cnf.d 
+      - /etc/localtime:/etc/localtime:ro      
+    networks:
+      - nextcloud_net
+
+networks:
+  frontend:
+    external:
+      name: frontend
+  nextcloud_net:
