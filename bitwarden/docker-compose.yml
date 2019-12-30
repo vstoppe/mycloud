@@ -33,11 +33,6 @@ services:
   web:
     image: bitwarden/web:latest
     container_name: bitwarden-web
-    #    environment:
-    #      - VIRTUAL_HOST=bitwarden.$DOMAIN
-    #      - VIRTUAL_PORT=5000
-    #      - LETSENCRYPT_HOST=bitwarden.$DOMAIN
-    #      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
     volumes:
       - $WS_DOCKER/$SERVICE/web:/etc/bitwarden/web
     env_file:
@@ -155,9 +150,6 @@ services:
       - attachments
       - identity
       - web
-      #ports:
-      #- '80:8080'
-      #- '443:8443'
     volumes:
       - $WS_DOCKER/$SERVICE/nginx:/etc/bitwarden/nginx
       - $DATA/$SERVICE/letsencrypt:/etc/letsencrypt
