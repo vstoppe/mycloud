@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  plex:
+    container_name: plex
+    image: "linuxserver/plex:latest"
+    env_file:
+      - ./${HOSTNAME}.env
+    environment:
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      - LETSENCRYPT_HOST=plex.$DOMAIN
+      - NETWORK_ACCESS=internal
+      - VIRTUAL_HOST=plex.$DOMAIN
+      - VIRTUAL_PORT=32400
+    hostname: plex
+    networks:
+      pubnet:
+        ipv4_address: "10.1.1.13"
+      frontend:
+    ports:
+      - 32400:32400
+      - 32400:32400/udp
+      - 32469:32469
+      - 32469:32469/udp
+      - 5353:5353/udp
+      - 1900:1900/udp
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - $DATA/plex/etc:/config
+      - /mnt/videos:/data/videos
+      - /mnt/musik:/data/musik:ro
+
+networks: 
+  pubnet:
+    external:
+      name: pub_net
+  frontend:
+    external:
+      name: frontend
