@@ -25,12 +25,6 @@ services:
     networks:
      - frontend
      - onlyoffice
-    ports:
-     - 80
-     - 443
-     - 5222
-    #extra_hosts:
-    # - next.lindenbox.de:10.1.1.6
     stdin_open: true
     tty: true
     volumes:
