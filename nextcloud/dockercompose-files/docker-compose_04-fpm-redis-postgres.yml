@@ -15,8 +15,6 @@ services:
       - REDIS_HOST=${SERVICE}_redis
     env_file:
       - ${HOSTNAME}.env
-    extra_hosts:
-      - mailbox.$DOMAIN:$DOCKER_HOST_IP
     volumes:
         # the actual data of the Nextcloud: 
       - $DATA/${SERVICE}/data:/var/nextdata
@@ -55,8 +53,6 @@ services:
       - LETSENCRYPT_HOST=${SUBDOMAIN}.$DOMAIN
       - VIRTUAL_HOST=${SUBDOMAIN}.$DOMAIN
       - VIRTUAL_PORT=80
-    extra_hosts:
-      - mailbox.$DOMAIN:$DOCKER_HOST_IP
     depends_on:
       - nextcloud
     networks:
