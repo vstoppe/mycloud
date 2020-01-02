@@ -3,20 +3,20 @@ version: '2.0'
 services:
   # Source: https://hub.docker.com/r/jwilder/nginx-proxy/
   nginx-proxy:
-    container_name: nginx-proxy
+    container_name: $SERVICE
     image: "jwilder/nginx-proxy:alpine"
     env_file:
-      - general.env
+      - ${HOSTNAME}.env
     ports:
       - "80:80"
       - "443:443"
     volumes:
       # folder for let's encrypt certs:
-      - $DATA/nginx-proxy/certs:/etc/nginx/certs
+      - $DATA/$SERVICE/certs:/etc/nginx/certs
       # Here we can store extra nginx parameter for the virtual hosts:
-      - $WS_DOCKER/nginx-proxy/etc/vhost.d:/etc/nginx/vhost.d
+      - $WS_DOCKER/$SERVICE/etc/vhost.d:/etc/nginx/vhost.d
       # This file is for defining the networks which are considered as private
-      - $WS_DOCKER/nginx-proxy/etc/network_internal.conf:/etc/nginx/network_internal.conf
+      - $WS_DOCKER/$SERVICE/etc/network_internal.conf:/etc/nginx/network_internal.conf
       ### This may be used to write challange file:
       - /usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -30,10 +30,10 @@ services:
 
   # Source: https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion/
   letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: jrcs/letsencrypt-${SERVICE}-companion
     volumes:
       # The companion write the certs into the nginx certs dir.
-      - $DATA/nginx-proxy/certs:/etc/nginx/certs:rw
+      - $DATA/$SERVICE/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
       - nginx-proxy
