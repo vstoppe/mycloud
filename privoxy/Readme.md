@@ -7,6 +7,18 @@ This is the proxy and advertisement filter setup. We have
 - nginx webserver which services the proxy.pac file
 
 
+# Compose-files
+
+In the dockercompose-files directory contains at least two configurations:
+
+- docker-compose_01-privoxy+nginx_wpad.yml: Use this in a network
+- docker-compose_02-privoxy_local.yml: Use this on a local machine. 
+
+Link the right file for your needs:
+
+`ln -s dockercompose-files/docker-compose_02-privoxy+local.yml ./docker-compose.yml`
+
+
 # Configuration
 
 - The [tor-privoxy-alpine](https://hub.docker.com/r/rdsubhas/tor-privoxy-alpine) image was incomplete, so it had to be a little bit adjusted by a Dockerfile. Documentation is included
