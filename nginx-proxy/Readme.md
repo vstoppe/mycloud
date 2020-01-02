@@ -16,3 +16,7 @@ Link the right file for your needs:
 # Environment
 
 The environment variables are set in the file ${HOSTNAME}.env. The myhostname.env file is a template.
+Link your environment file:
+
+`ln -s ${HOSTNAME}.env .env`
+
