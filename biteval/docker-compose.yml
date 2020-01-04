@@ -1,0 +1,170 @@
+#
+# Useful references:
+# https://docs.docker.com/compose/compose-file/
+# https://docs.docker.com/compose/reference/overview/#use--f-to-specify-name-and-path-of-one-or-more-compose-files
+# https://docs.docker.com/compose/reference/envvars/
+#
+#########################################################################
+# WARNING: This file is generated. Do not make changes to this file.    #
+# They will be overwritten on update. If you want to make additions to  #
+# this file, you can create a `docker-compose.override.yml` file in the #
+# same directory and it will be merged into this file at runtime. You   #
+# can also manage various settings used in this file from the           #
+# ./bwdata/config.yml file for your installation.                       #
+#########################################################################
+
+version: '3'
+
+services:
+  mssql:
+    image: bitwarden/mssql:latest
+    container_name: bitwarden-mssql
+    volumes:
+      - $DATA/$SERVICE/mssql/data:/var/opt/mssql/data
+      - $DATA/$SERVICE/logs/mssql:/var/opt/mssql/log
+      - $DATA/$SERVICE/mssql/backups:/etc/bitwarden/mssql/backups
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/mssql.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+      - $WS_DOCKER/$SERVICE/env/mssql.override.env
+    networks:
+      - bitwarden_net
+
+  web:
+    image: bitwarden/web:latest
+    container_name: bitwarden-web
+    volumes:
+      - $WS_DOCKER/$SERVICE/web:/etc/bitwarden/web
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+    networks:
+      - bitwarden_net
+
+  attachments:
+    image: bitwarden/attachments:latest
+    container_name: bitwarden-attachments
+    volumes:
+      - $DATA/$SERVICE/core/attachments:/etc/bitwarden/core/attachments
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+    networks:
+      - bitwarden_net
+
+  api:
+    image: bitwarden/api:latest
+    container_name: bitwarden-api
+    volumes:
+      - $DATA/$SERVICE/core:/etc/bitwarden/core
+        #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      - $DATA/$SERVICE/logs/api:/etc/bitwarden/logs
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+      - $WS_DOCKER/$SERVICE/env/global.override.env
+    networks:
+      - bitwarden_net
+
+  identity:
+    image: bitwarden/identity:latest
+    container_name: bitwarden-identity
+    volumes:
+      - $DATA/$SERVICE/core:/etc/bitwarden/core
+      - $DATA/$SERVICE/logs/identity:/etc/bitwarden/logs
+        #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      - $WS_DOCKER/$SERVICE/identity:/etc/bitwarden/identity
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+      - $WS_DOCKER/$SERVICE/env/global.override.env
+    networks:
+      - bitwarden_net
+
+  admin:
+    image: bitwarden/admin:latest
+    container_name: bitwarden-admin
+    depends_on:
+      - mssql
+    volumes:
+      - $DATA/$SERVICE/core:/etc/bitwarden/core
+        #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      - $DATA/$SERVICE/logs/admin:/etc/bitwarden/logs
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+      - $WS_DOCKER/$SERVICE/env/global.override.env
+    networks:
+      - bitwarden_net
+
+  icons:
+    image: bitwarden/icons:latest
+    container_name: bitwarden-icons
+    volumes:
+      #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      - $DATA/$SERVICE/logs/icons:/etc/bitwarden/logs
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+    networks:
+      - bitwarden_net
+
+  notifications:
+    image: bitwarden/notifications:latest
+    container_name: bitwarden-notifications
+    volumes:
+      #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      - $DATA/$SERVICE/logs/notifications:/etc/bitwarden/logs
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+      - $WS_DOCKER/$SERVICE/env/global.override.env
+    networks:
+      - bitwarden_net
+
+  events:
+    image: bitwarden/events:latest
+    container_name: bitwarden-events
+    volumes:
+      #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      - $DATA/$SERVICE/logs/events:/etc/bitwarden/logs
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/global.env
+      - $WS_DOCKER/$SERVICE/env/uid.env
+      - $WS_DOCKER/$SERVICE/env/global.override.env
+    networks:
+      - bitwarden_net
+
+  nginx:
+    image: bitwarden/nginx:latest
+    container_name: bitwarden-nginx
+    environment:
+      - VIRTUAL_HOST=bitwarden.$DOMAIN
+      - VIRTUAL_PORT=8443
+      - VIRTUAL_PROTO=HTTPS
+      - LETSENCRYPT_HOST=bitwarden.$DOMAIN
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+    depends_on:
+      - admin
+      - api
+      - attachments
+      - identity
+      - web
+    volumes:
+      - $WS_DOCKER/$SERVICE/nginx:/etc/bitwarden/nginx
+      - $DATA/$SERVICE/letsencrypt:/etc/letsencrypt
+      - $DATA/nginx-proxy/certs:/etc/nginx/certs
+      - $WS_DOCKER/$SERVICE/ssl:/etc/ssl
+      - $DATA/$SERVICE/logs/nginx:/var/log/nginx
+    env_file:
+      - $WS_DOCKER/$SERVICE/env/uid.env
+    networks:
+      - bitwarden_net
+      - frontend
+    
+
+networks:
+  frontend:
+    external:
+      name: frontend
+  bitwarden_net:
