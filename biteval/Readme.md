@@ -1,4 +1,4 @@
-# This is my bitwarden installation by the (manuel method)[https://help.bitwarden.com/article/install-on-premise/#manual-docker-installations].
+# This is my bitwarden installation by the [manuel method](https://help.bitwarden.com/article/install-on-premise/#manual-docker-installations).
 
 Most steps are performed by the setup.sh script. It takes all environment variables for configuration from one file.
 
