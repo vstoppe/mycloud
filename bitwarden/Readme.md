@@ -1,13 +1,20 @@
-# This is my bitwarden installation by the (manuel metho)[https://help.bitwarden.com/article/install-on-premise/#manual-docker-installations]
+# This is my bitwarden installation by the [manuel method](https://help.bitwarden.com/article/install-on-premise/#manual-docker-installations).
 
-- get Bitwarden (Installation ID & Key)[https://bitwarden.com/host/]
-- global.override.env set vars:
--- Installation__id 
--- installation__key
--- baseServiceURI__*
--- attachment___url
-- Generate pfx certificate file
--- `openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout identity.key -out identity.crt -subj "/CN=Bitwarden IdentityServer" -days 10950`
--- `openssl pkcs12 -export -out identity.pfx -inkey identity.key -in identity.crt -certfile identity.crt -passout pass:IDENTITY_CERT_PASSWORD`
+Most steps are performed by the setup.sh script. It takes all environment variables for configuration from one file.
 
-- For letsencrypt download the root certificate for ssl_certificate_key
+
+# Setup
+
+* Set your environment variables in your myhostname.env
+  * `cp myhostname.env $HOSTNAME.env`
+  * `vim $HOSTNAME.env`
+* Execute `setup.sh`
+
+Becaus bitwarden-nginx uses a letsencrpyt certificate interanally, we need to create it first. Therefore we fire up and nginx-container to request the certs. When the certs are generated we stop the container again:
+* `source $HOSTNAME.env`
+* `docker run --rm -e LETSENCRYPT_HOST=$SERVICE.$DOMAIN -e LETSENCRYPT_EMAI=$ADMIN_MAIL  nginx:alpine`
+* `Control+C`
+
+Now check the Setup:
+
+`docker-compose up`

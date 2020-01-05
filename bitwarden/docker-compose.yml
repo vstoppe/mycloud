@@ -18,7 +18,7 @@ version: '3'
 services:
   mssql:
     image: bitwarden/mssql:latest
-    container_name: bitwarden-mssql
+    container_name: $SERVICE-mssql
     volumes:
       - $DATA/$SERVICE/mssql/data:/var/opt/mssql/data
       - $DATA/$SERVICE/logs/mssql:/var/opt/mssql/log
@@ -32,7 +32,7 @@ services:
 
   web:
     image: bitwarden/web:latest
-    container_name: bitwarden-web
+    container_name: $SERVICE-web
     volumes:
       - $WS_DOCKER/$SERVICE/web:/etc/bitwarden/web
     env_file:
@@ -43,7 +43,7 @@ services:
 
   attachments:
     image: bitwarden/attachments:latest
-    container_name: bitwarden-attachments
+    container_name: $SERVICE-attachments
     volumes:
       - $DATA/$SERVICE/core/attachments:/etc/bitwarden/core/attachments
     env_file:
@@ -54,10 +54,10 @@ services:
 
   api:
     image: bitwarden/api:latest
-    container_name: bitwarden-api
+    container_name: $SERVICE-api
     volumes:
       - $DATA/$SERVICE/core:/etc/bitwarden/core
-      - $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+        #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
       - $DATA/$SERVICE/logs/api:/etc/bitwarden/logs
     env_file:
       - $WS_DOCKER/$SERVICE/env/global.env
@@ -68,11 +68,11 @@ services:
 
   identity:
     image: bitwarden/identity:latest
-    container_name: bitwarden-identity
+    container_name: $SERVICE-identity
     volumes:
       - $DATA/$SERVICE/core:/etc/bitwarden/core
       - $DATA/$SERVICE/logs/identity:/etc/bitwarden/logs
-      - $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+        #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
       - $WS_DOCKER/$SERVICE/identity:/etc/bitwarden/identity
     env_file:
       - $WS_DOCKER/$SERVICE/env/global.env
@@ -83,12 +83,12 @@ services:
 
   admin:
     image: bitwarden/admin:latest
-    container_name: bitwarden-admin
+    container_name: $SERVICE-admin
     depends_on:
       - mssql
     volumes:
       - $DATA/$SERVICE/core:/etc/bitwarden/core
-      - $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+        #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
       - $DATA/$SERVICE/logs/admin:/etc/bitwarden/logs
     env_file:
       - $WS_DOCKER/$SERVICE/env/global.env
@@ -99,9 +99,9 @@ services:
 
   icons:
     image: bitwarden/icons:latest
-    container_name: bitwarden-icons
+    container_name: $SERVICE-icons
     volumes:
-      - $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
       - $DATA/$SERVICE/logs/icons:/etc/bitwarden/logs
     env_file:
       - $WS_DOCKER/$SERVICE/env/global.env
@@ -111,9 +111,9 @@ services:
 
   notifications:
     image: bitwarden/notifications:latest
-    container_name: bitwarden-notifications
+    container_name: $SERVICE-notifications
     volumes:
-      - $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
       - $DATA/$SERVICE/logs/notifications:/etc/bitwarden/logs
     env_file:
       - $WS_DOCKER/$SERVICE/env/global.env
@@ -124,9 +124,9 @@ services:
 
   events:
     image: bitwarden/events:latest
-    container_name: bitwarden-events
+    container_name: $SERVICE-events
     volumes:
-      - $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
+      #- $DATA/$SERVICE/ca-certificates:/etc/bitwarden/ca-certificates
       - $DATA/$SERVICE/logs/events:/etc/bitwarden/logs
     env_file:
       - $WS_DOCKER/$SERVICE/env/global.env
@@ -137,12 +137,12 @@ services:
 
   nginx:
     image: bitwarden/nginx:latest
-    container_name: bitwarden-nginx
+    container_name: $SERVICE-nginx
     environment:
-      - VIRTUAL_HOST=bitwarden.$DOMAIN
+      - VIRTUAL_HOST=$SERVICE.$DOMAIN
       - VIRTUAL_PORT=8443
       - VIRTUAL_PROTO=HTTPS
-      - LETSENCRYPT_HOST=bitwarden.$DOMAIN
+      - LETSENCRYPT_HOST=$SERVICE.$DOMAIN
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL
     depends_on:
       - admin
