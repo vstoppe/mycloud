@@ -6,8 +6,11 @@ Most steps are performed by the setup.sh script. It takes all environment variab
 # Setup
 
 - Set your environment variables in your myhostname.env
+
 -- `cp myhostname.env $HOSTNAME.env`
+
 -- `vim $HOSTNAME.env`
+
 - Execute `setup.sh`
 
 Becaus bitwarden-nginx uses a letsencrpyt certificate interanally, we need to create it first. Therefore we fire up and nginx-container to request the certs. When the certs are generated we stop the container again:
