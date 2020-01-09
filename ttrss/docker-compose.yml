@@ -14,7 +14,7 @@ services:
       - VIRTUAL_HOST=$SUBDOMAIN.$DOMAIN
       - VIRTUAL_PORT=8080
     volumes:
-        - $DATA/$SERVICE/config
+      - $DATA/$SERVICE/config:/var/www/ttrss/docker
     depends_on:
       - ttrss_pg
     networks:
@@ -31,8 +31,8 @@ services:
       - POSTGRES_PASSWORD=$DB_PASS
       - POSTGRES_USER=$DB_USER
     volumes:
-      - $DATA/$SERVICE/postgres/data:/var/lib/mysql
-      - $DATA/$SERVICE/postgres/logs:/var/log/data
+      - $DATA/${SERVICE}/pg/:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro      
     networks:
     - ttrss_net
 
