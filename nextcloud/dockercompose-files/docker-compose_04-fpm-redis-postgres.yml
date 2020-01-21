@@ -9,6 +9,7 @@ services:
     mem_limit: 2048m
     mem_reservation: 512m
     environment:
+        # One or more trusted domains can be set by environment variable, too. They will be added to the configuration after install
       - NEXTCLOUD_TRUSTED_DOMAINS=${SUBDOMAIN}.${DOMAIN}
       - POSTGRES_DB=nextcloud
       - POSTGRES_HOST=${SERVICE}_pg
