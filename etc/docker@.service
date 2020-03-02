@@ -1,0 +1,14 @@
+[Unit]
+Description=Docker generic startup for container %i
+Requires=docker.service
+After=docker.service
+
+[Service]
+WorkingDirectory=/mnt/workspace/docker/%i/
+Restart=no
+
+ExecStart=/usr/bin/docker-compose up
+ExecStop=/usr/bin/docker-compose down
+
+[Install]
+WantedBy=default.target
