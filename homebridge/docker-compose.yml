@@ -1,0 +1,15 @@
+version: '2'
+services:
+  homebridge:
+    image: oznu/homebridge:latest  # use "raspberry-pi" instead of "latest" for arm devices
+    network_mode: host
+    container_name: homebridge
+    environment:
+      - TZ=Europe/Berlin
+      - PGID=1000
+      - PUID=1000
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8080
+    volumes:
+      - $DATA/homebridge:/homebridge
+
