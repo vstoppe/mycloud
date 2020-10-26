@@ -17,13 +17,13 @@ services:
       pubnet:
         ipv4_address: "10.1.1.13"
       frontend:
-    ports:
-      - 32400:32400
-      - 32400:32400/udp
-      - 32469:32469
-      - 32469:32469/udp
-      - 5353:5353/udp
-      - 1900:1900/udp
+        #    ports:
+        #      - 32400:32400
+        #      - 32400:32400/udp
+        #      - 32469:32469
+        #      - 32469:32469/udp
+        #      - 5353:5353/udp
+        #      - 1900:1900/udp
     volumes:
       - /etc/localtime:/etc/localtime
       - $DATA/plex/etc:/config
