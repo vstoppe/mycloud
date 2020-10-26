@@ -1,5 +1,12 @@
 # Entry for privoxy wpad file distributon.  We need this entry 
 # for the clients to get their proxy configuration.
-10.1.1.6 wpad.fritz.box
+10.1.1.5 privoxy
 10.1.1.6 kibana.lindenbox.de
+10.1.1.6 next.lindenbox.de
 10.1.1.6 plex.lindenbox.de
+10.1.1.6 plugbrain.lindenbox.de
+10.1.1.6 reader.lindenbox.de
+10.1.1.6 wpad.fritz.box
+10.1.1.6 zabbix.lindenbox.de
+10.1.1.6 webvirt.lindenbox.de
+10.1.1.7 boinc.lindenbox.de
