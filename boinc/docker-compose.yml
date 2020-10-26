@@ -1,0 +1,21 @@
+version: '3'
+services:
+  boinc:
+    container_name: boinc
+    image: boinc/client:intel
+    env_file:
+      - ${HOSTNAME}.env
+    devices:
+      - "/dev/dri:/dev/dri"
+    volumes:
+      - $DATA/boinc/:/var/lib/boinc
+    pid: "host"
+    networks:
+      pubnet:
+        ipv4_address: "10.1.1.7"
+
+
+networks:
+  pubnet:
+    external:
+      name: pub_net
