@@ -7,7 +7,7 @@ services:
       - $WS_DOCKER/privoxy/etc/config:/etc/privoxy/config
     networks:
       pubnet:
-        ipv4_address: $PROXY_IP
+        ipv4_address: $IP_PRIVOXY
 
   nginx_wpad:
     image: nginx:alpine
