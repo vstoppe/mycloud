@@ -3,17 +3,17 @@ Power up wallabag
 
 # Setup
 
-   cp wallabag.env.example wallabag.env
+    cp wallabag.example.env wallabag.env
 
 Customize the wallabag.env to your needs.
 
 Start the wallabag stack:
 
-   docker-compose up
+    docker-compose up
 
 (or as systemd service)
 
 
 Perform the initialization of the database if it is not done automatically:
 
-   docker exec -t wallabag /var/www/wallabag/bin/console wallabag:install --env=prod --no-interaction
+    docker exec -t wallabag /var/www/wallabag/bin/console wallabag:install --env=prod --no-interaction
