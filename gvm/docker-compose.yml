@@ -1,0 +1,24 @@
+version: '3'
+services:
+  gvm:
+    container_name: gvm
+    image: securecompliance/gvm
+    env_file:
+      - gvm.env
+    environment:
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      - LETSENCRYPT_HOST=gvm.$DOMAIN
+      - VIRTUAL_HOST=gvm.$DOMAIN
+      - VIRTUAL_PORT=9392
+      - NETWORK_ACCESS=internal
+    ports:
+        - 9392
+    volumes:
+      - $DATA/gvm/:/data
+    networks:
+      frontend:
+
+networks:
+  frontend:
+    external:
+      name: frontend
