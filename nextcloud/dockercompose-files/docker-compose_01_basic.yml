@@ -34,7 +34,7 @@ services:
       - $DATA/${SERVICE}/themes:/var/www/html/themes
 
         # the actual data of nextcloud
-      - $NEXTDATA:/var/www/html/data
+      - $DATA/${SERVICE}/data:/var/nextdata
         # private video folder:
       - $NEXTVIDEO:/mnt/videos:ro 
         # private audio file folder:
