@@ -7,6 +7,8 @@ services:
     image: "jwilder/nginx-proxy:alpine"
     env_file:
       - ${HOSTNAME}.env
+    extra_hosts:
+      - "code.$DOMAIN:$FRONTEND_IP"
     volumes:
       # folder for let's encrypt certs:
       - $DATA/$SERVICE/certs:/etc/nginx/certs
@@ -27,11 +29,10 @@ services:
 
   # Source: https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion/
   letsencrypt:
-    image: jrcs/letsencrypt-${SERVICE}-companion
+    image: jrcs/letsencrypt-nginx-proxy-companion
     volumes:
-      # The companion write the certs into the nginx certs dir.
-      - $DATA/$SERVICE/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $DATA/$SERVICE/acme.sh:/etc/acme.sh
     volumes_from:
       - nginx-proxy
 
