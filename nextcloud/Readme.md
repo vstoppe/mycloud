@@ -1,6 +1,6 @@
 # About
 
-This folder holds a flexible Nextcloud configurtion. Is is configured by variables and can spin up different instances for testing or production.
+This folder holds a flexible Nextcloud configurtion. It is configured by variables and can spin up different instances for testing or production.
 
 # Configuration
 
@@ -30,6 +30,8 @@ The folder docker-compose-files containes different compose files for nextcloud.
 - docker-compose_01_basic.yml: nextcloud-apache + mysql
 - docker-compose_02_fpm.yml: netcloud-fpm + mysql
 - docker-compose_03_redis.yml: nextcloud-fpm + mysql + redis
+- docker-compose_04-fpm-redis-postgres.yml: nextcloud-fpm + postgres + redis
+- docker-compose_05-fpm-redis-postgres-CODE.yml: nextcloud-fpm + postgres + redis + CODE (Onlyoffice online)
 
 Feel free to adjust them to your needs or link them as your compose file:
 
