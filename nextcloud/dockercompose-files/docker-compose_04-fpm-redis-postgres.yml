@@ -1,6 +1,5 @@
 version: '2.2'
 services:
-
   nextcloud:
     # Source: https://hub.docker.com/_/nextcloud/
     container_name: ${SERVICE}
@@ -18,18 +17,18 @@ services:
     env_file:
       - ${HOSTNAME}.env
     volumes:
-        # the actual data of the Nextcloud:
+      # the actual data of the Nextcloud:
       - $DATA/${SERVICE}/data:/var/nextdata
-        # Main folder needed for updating:
+      # Main folder needed for updating:
       - $DATA/${SERVICE}/html:/var/www/html
-        # local configuration
+      # local configuration
       - $DATA/${SERVICE}/config:/var/www/html/config
 
-        # private video folder:
+      # private video folder:
       - $NEXTVIDEO:/mnt/videos:ro
-        # private audio file folder:
+      # private audio file folder:
       - $NEXTAUDIO:/mnt/audio:ro
-        # private music file folder:
+      # private music file folder:
       - $NEXTMUSIC:/mnt/musik:ro
 
         # Custom settings for php fpm to make nextcloud work. The default settings resulted in the error:
