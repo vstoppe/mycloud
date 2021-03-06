@@ -21,8 +21,6 @@ This way you can eg. run a production environment "nextcloud" but also spin up i
 ## startup
 
 
-
-
 ## docker-compose files
 
 The folder docker-compose-files containes different compose files for nextcloud. They contain quiet different configurations:
@@ -33,23 +31,24 @@ The folder docker-compose-files containes different compose files for nextcloud.
 - docker-compose_04-fpm-redis-postgres.yml: nextcloud-fpm + postgres + redis
 - docker-compose_05-fpm-redis-postgres-CODE.yml: nextcloud-fpm + postgres + redis + CODE (Onlyoffice online)
 
+At the moment I am running the configuration 04 in combination with the OnlyOffice configuration. When I was using CODE for the frist and last time it was damn ugly. The benefit of OnlyOffice ist, that you also get it on the desktop or as an app for your mobile device.
+
 Feel free to adjust them to your needs or link them as your compose file:
 
 `ln -s dockercompose-files/docker-compose_03_redis.yml ./docker-compose.yml`
 
 
+# Setup
 
-# !Setup
+Nextcloud needs to get the right permission for some folders. The nc-setup.sh takes care of this, depending auf an Apche/fpm or MySQL/Postgres setup:
 
-Nextcloud needs to get write permission to some folders manually. The setup.sh takes care of it.
+`bash ./nc-setup.sh myhostname.env`
 
-`source myhostname.env`
-`./setup.sh`
-`docker-compse up
+`docker-compse up`
 
 ## Install apps
 
-Install a list op apps from a file:
+If you like you can install a pre defined list of apps from a file. This might be helpful for testing or when you create a fresh instance. But you can also do it later inside the nextcloud:
 
 	### apps.txt
 	calendar
