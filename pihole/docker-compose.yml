@@ -4,10 +4,10 @@ services:
     container_name: pihole
     image: pihole/pihole:latest
     env_file:
-      - ${HOST}.env
+      - pihole.env
     environment:
       # Without DNSMASQ_LISTENING=all dnsmasq does not answer to dns requests
-      - DNSMASQ_LISTENING=all 
+      - DNSMASQ_LISTENING=all
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL
       - LETSENCRYPT_HOST=pihole.$DOMAIN
       - VIRTUAL_HOST=pihole.$DOMAIN
