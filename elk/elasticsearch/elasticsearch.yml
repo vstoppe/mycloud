@@ -1,0 +1,15 @@
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+
+xpack.ccr.enabled: false
+xpack.data_frame.enabled: false
+xpack.enrich.enabled: false
+xpack.eql.enabled: false
+xpack.graph.enabled: false
+xpack.idp.enabled: false
+xpack.ilm.enabled: false
+xpack.ml.enabled: false
+xpack.slm.enabled: false
+xpack.sql.enabled: false
+xpack.transform.enabled: false
+xpack.vectors.enabled: false
