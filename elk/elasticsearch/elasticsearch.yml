@@ -1,6 +1,12 @@
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
 
+logger.org.elasticsearch: warn
+
+# Minimum security features:
+xpack.security.enabled: true
+discovery.type: single-node
+
 xpack.ccr.enabled: false
 xpack.data_frame.enabled: false
 xpack.enrich.enabled: false

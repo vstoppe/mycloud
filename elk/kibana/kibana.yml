@@ -5,6 +5,10 @@ elasticsearch.hosts: [ "http://elasticsearch:9200" ]
 
 server.publicBaseUrl: "https://kibana.linden.net"
 
-xpack.infra.enabled: false
-xpack.logstash.enabled: false
-xpack.canvas.enabled: false
+logging.root.level: warn
+
+elasticsearch.username: "kibana_system"
+
+#xpack.infra.enabled: false
+#xpack.logstash.enabled: false
+#xpack.canvas.enabled: false

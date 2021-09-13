@@ -1,2 +1,7 @@
 http.host: "0.0.0.0"
 # xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+
+# Will be enabled from v8, early opt in (value "v8" not accepted)
+pipeline.ecs_compatibility: v1
+
+log.level: info

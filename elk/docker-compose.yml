@@ -26,7 +26,7 @@ services:
     ports:
       - 5601:5601
     volumes:
-      - $STACK_CONF/$SERVICE/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - $STACK_CONF/$SERVICE/kibana:/usr/share/kibana/config
     links:
       - elasticsearch:elasticsearch
     depends_on:
@@ -49,6 +49,7 @@ services:
     container_name: ${SERVICE}_logstash
     hostname:       ${SERVICE}_logstash
     ports:
+      - 5044:5044
       - 9600:9600
       - 8089:8089
     volumes:
