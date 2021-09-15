@@ -7,7 +7,7 @@ services:
     image: "jwilder/nginx-proxy:alpine"
     extra_hosts:
       - "code.$DOMAIN:$FRONTEND_IP"
-    restart: unless-stopped
+    restart: $RESTART_POLICY
     volumes:
       # folder for let's encrypt certs:
       - $DATA/$SERVICE/certs:/etc/nginx/certs
@@ -29,6 +29,7 @@ services:
   # Source: https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion/
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: $RESTART_POLICY
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - $DATA/$SERVICE/acme.sh:/etc/acme.sh
@@ -37,6 +38,10 @@ services:
 
   proxy-companion:
     image: sebastienheyd/self-signed-proxy-companion
+    restart: $RESTART_POLICY
+    environment:
+      # Apple accepts these exipration days maximum:
+      - EXPIRATION=825
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
