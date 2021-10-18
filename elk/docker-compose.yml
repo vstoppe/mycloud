@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.14.1
+    container_name: ${SERVICE}_elasticsearch
+    hostname:       ${SERVICE}_elasticsearch
+    environment:
+      - "discovery.type=single-node"
+    ports:
+    - 9200:9200
+    - 9300:9300
+    volumes:
+      - $STACK_DATA/$SERVICE/elastic_data:/usr/share/elasticsearch/data
+      - $STACK_CONF/$SERVICE/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    restart: $RESTART_POLICY
+    networks:
+      elknetwork:
+        aliases:
+          - elasticsearch
+
+  kibana:
+    image: kibana:7.14.1
+    container_name: ${SERVICE}_kibana
+    hostname:       ${SERVICE}_kibana
+    ports:
+      - 5601:5601
+    volumes:
+      - $STACK_CONF/$SERVICE/kibana:/usr/share/kibana/config
+    links:
+      - elasticsearch:elasticsearch
+    depends_on:
+      - elasticsearch
+    restart: $RESTART_POLICY
+    networks:
+      - elknetwork
+      - frontend
+    environment:
+      ### Virtual host
+      #- LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      #- LETSENCRYPT_HOST=kibana.$DOMAIN
+      - NETWORK_ACCESS=internal
+      - VIRTUAL_HOST=kibana.$DOMAIN
+      - VIRTUAL_PORT=5601
+      - SELF_SIGNED_HOST=kibana.$DOMAIN
+
+  logstash:
+    image: logstash:7.14.1
+    container_name: ${SERVICE}_logstash
+    hostname:       ${SERVICE}_logstash
+    ports:
+      - 5044:5044
+      - 9600:9600
+      - 8089:8089
+    volumes:
+      - $STACK_CONF/$SERVICE/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - $STACK_CONF/$SERVICE/logstash/pipeline:/usr/share/logstash/pipeline
+    links:
+      - elasticsearch:elasticsearch
+    depends_on:
+      - elasticsearch
+    restart: $RESTART_POLICY
+    networks:
+      - elknetwork
+
+
+networks:
+  frontend:
+    external:
+      name: frontend
+  elknetwork:

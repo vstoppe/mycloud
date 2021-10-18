@@ -1,0 +1,14 @@
+# Default Kibana configuration for docker target
+server.host: "0"
+server.shutdownTimeout: "5s"
+elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+
+server.publicBaseUrl: "https://kibana.linden.net"
+
+logging.root.level: warn
+
+elasticsearch.username: "kibana_system"
+
+#xpack.infra.enabled: false
+#xpack.logstash.enabled: false
+#xpack.canvas.enabled: false
