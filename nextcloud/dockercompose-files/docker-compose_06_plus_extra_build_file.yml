@@ -1,0 +1,98 @@
+version: '2.2'
+services:
+  nextcloud:
+    # Source: https://hub.docker.com/_/nextcloud/
+    container_name: ${SERVICE}
+    image: nextcloud:${VERSION}-fpm-alpine
+    build:
+      context: ./dockerfiles
+      dockerfile: nextcloud
+      args:
+        - VERSION=$VERSION
+    # If the mem_limit is not set nextcloud will grab as much memory as possible:
+    mem_limit: 2048m
+    mem_reservation: 512m
+    environment:
+        # One or more trusted domains can be set by environment variable, too. They will be added to the configuration after install
+      - NEXTCLOUD_TRUSTED_DOMAINS=${SUBDOMAIN}.${DOMAIN}
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_HOST=${SERVICE}_pg
+      - REDIS_HOST=${SERVICE}_redis
+      - REDIS_HOST_PASSWORD=$REDIS_PASS
+    env_file:
+      - ${HOSTNAME}.env
+    volumes:
+      # the actual data of the Nextcloud:
+      - $DATA/${SERVICE}/data:/var/nextdata
+      # Main folder needed for updating:
+      - $DATA/${SERVICE}/html:/var/www/html
+      # local configuration
+      - $DATA/${SERVICE}/config:/var/www/html/config
+
+      # private video folder:
+      - $NEXTVIDEO:/mnt/videos:ro
+      # private audio file folder:
+      - $NEXTAUDIO:/mnt/audio:ro
+      # private music file folder:
+      - $NEXTMUSIC:/mnt/musik:ro
+
+        # Custom settings for php fpm to make nextcloud work. The default settings resulted in the error:
+        # WARNING: [pool www] server reached pm.max_children setting (5), consider raising it
+      - $WS_DOCKER/${SERVICE}/etc/www-custom.ini:/usr/local/etc/php-fpm.d/zz-custom.conf
+    networks:
+      # frontend is used to communicate with the mailbox container
+      - frontend
+      - nextcloud_net
+    depends_on:
+      - nextcloud_pg
+      - nextcloud_redis
+
+
+  nextcloud_fe:
+    image: nginx:mainline-alpine
+    container_name: ${SERVICE}_fe
+    volumes:
+      - $DATA/${SERVICE}/html:/var/www/html:ro
+      - $WS_DOCKER/${SERVICE}/etc/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      ### Virtual host
+      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
+      - LETSENCRYPT_HOST=${SUBDOMAIN}.${DOMAIN}
+      - VIRTUAL_HOST=${SUBDOMAIN}.${DOMAIN}
+      - VIRTUAL_PORT=80
+    depends_on:
+      - nextcloud
+    networks:
+      - frontend
+      - nextcloud_net
+
+
+  nextcloud_pg:
+    container_name: ${SERVICE}_pg
+    image: postgres:12-alpine
+    env_file:
+      - ${HOSTNAME}.env
+    volumes:
+      - $DATA/${SERVICE}/pg/:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - nextcloud_net
+
+
+  # Redis leads to _drastic_ performance improvements:
+  nextcloud_redis:
+    container_name: ${SERVICE}_redis
+    image: redis:alpine
+    mem_limit: 2048m
+    mem_reservation: 512m
+    networks:
+      - nextcloud_net
+    # Redis from Version 6 Requires a password.
+    # This needs to be added to the nextcloud config.php unter "redis":
+    command: redis-server --requirepass $REDIS_PASS
+
+networks:
+  frontend:
+    external:
+      name: frontend
+  nextcloud_net:

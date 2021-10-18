@@ -1,0 +1,11 @@
+ARG VERSION
+FROM nextcloud:${VERSION}-fpm-alpine
+
+# Necessary dependency
+RUN apk add imagemagick php7-pecl-imagick
+
+# ocDownloader dependency
+# RUN apk add aria2 php-curl
+# RUN mkdir /var/log/aria2c /var/local/aria2c
+# RUN touch /var/log/aria2c/aria2c.log
+# RUN touch /var/local/aria2c/aria2c.sess
