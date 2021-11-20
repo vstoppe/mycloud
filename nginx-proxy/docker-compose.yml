@@ -5,17 +5,14 @@ services:
   nginx-proxy:
     container_name: $SERVICE
     image: "jwilder/nginx-proxy:alpine"
-    env_file:
-      - ${HOSTNAME}.env
-    extra_hosts:
-      - "code.$DOMAIN:$FRONTEND_IP"
+    restart: $RESTART_POLICY
     volumes:
       # folder for let's encrypt certs:
-      - $DATA/$SERVICE/certs:/etc/nginx/certs
+      - $STACK_DATA/$SERVICE/certs:/etc/nginx/certs
       # Here we can store extra nginx parameter for the virtual hosts:
-      - $WS_DOCKER/$SERVICE/etc/vhost.d:/etc/nginx/vhost.d
+      - $STACK_CONF/$SERVICE/etc/vhost.d:/etc/nginx/vhost.d
       # This file is for defining the networks which are considered as private
-      - $WS_DOCKER/$SERVICE/etc/network_internal.conf:/etc/nginx/network_internal.conf
+      - $STACK_CONF/$SERVICE/etc/network_internal.conf:/etc/nginx/network_internal.conf
       ### This may be used to write challange file:
       - /usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -30,9 +27,21 @@ services:
   # Source: https://hub.docker.com/r/jrcs/letsencrypt-nginx-proxy-companion/
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: $RESTART_POLICY
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - $DATA/$SERVICE/acme.sh:/etc/acme.sh
+    volumes_from:
+      - nginx-proxy
+
+  proxy-companion:
+    image: sebastienheyd/self-signed-proxy-companion
+    restart: $RESTART_POLICY
+    environment:
+      # Apple accepts these exipration days maximum:
+      - EXPIRATION=825
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
       - nginx-proxy
 

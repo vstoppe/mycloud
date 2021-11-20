@@ -1,22 +1,21 @@
 # Abstract
 
-This is an nginx-proxy usually combined with the letsencrypt-nginx-proxy-companion.
+This is an nginx-proxy usually combined with certificate generation capablities
 
 # Compose-files
 
-In the dockercompose-files directory contains at least two configurations:
+The jwilder/nginx-proxy in the compose file is enhanced by:
 
-- docker-compose_01-nginx-proxy_and_letsencrypt-companion.yml: nginx-proxy + letsencrypt-companion
-- docker-compose_02-nginx-proxy_local.yml: just nginx-proxy for local use
+- jrcs/letsencrypt-nginx-proxy-companion
+- sebastianheyd/self-signed-proxy-companion
 
-Link the right file for your needs:
+The self-signed-proxy-companion generates an own CA for self signed certificates
 
-`ln -s dockercompose-files/docker-compose_01-nginx-proxy_and_letsencrypt-companion.yml ./docker-compose.yml`
 
 # Environment
 
-The environment variables are set in the file ${HOSTNAME}.env. The myhostname.env file is a template.
-Link your environment file:
+Environment variables which need to be set:
 
-`ln -s ${HOSTNAME}.env .env`
+- FRONTEND_IP: Tell nginx on which ip in local network to listen
+- SERVICE: Service name of the compose stack. Defaults to "nginx-proxy" by .env
 
