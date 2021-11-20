@@ -34,12 +34,14 @@ services:
     volumes_from:
       - nginx-proxy
 
+  # Source: https://github.com/sebastienheyd/docker-self-signed-proxy-companion
   proxy-companion:
     image: sebastienheyd/self-signed-proxy-companion
     restart: $RESTART_POLICY
     environment:
       # Apple accepts these exipration days maximum:
       - EXPIRATION=825
+      - NGINX_PROXY_CONTAINER=$SERVICE
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
