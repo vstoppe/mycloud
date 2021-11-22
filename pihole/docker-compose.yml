@@ -37,6 +37,3 @@ networks:
   pubnet:
     external:
       name: pub_net
-
-volumes:
-  pihole_etc:
