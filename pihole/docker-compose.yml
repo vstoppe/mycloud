@@ -2,25 +2,29 @@ version: '3'
 services:
   pihole:
     container_name: pihole
+    hostname: pihole
     image: pihole/pihole:latest
     env_file:
       - pihole.env
     environment:
       # Without DNSMASQ_LISTENING=all dnsmasq does not answer to dns requests
       - DNSMASQ_LISTENING=all
-      - LETSENCRYPT_EMAIL=$ADMIN_MAIL
-      - LETSENCRYPT_HOST=pihole.$DOMAIN
-      - VIRTUAL_HOST=pihole.$DOMAIN
+      - VIRTUAL_HOST=pihole.$LOCAL_DOMAIN
+      - SELF_SIGNED_HOST=pihole.$LOCAL_DOMAIN
       - VIRTUAL_PORT=80
       # We want this service not be accessible from the internet:
       - NETWORK_ACCESS=internal
+      - PIHOLE_DOMAIN=$LOCAL_DOMAIN
     volumes:
-      # For general settings
-      - pihole_etc:/etc/pihole
+      - $STACK_DATA/pihole/etc:/etc/pihole
+      - $STACK_DATA/pihole/dnsmasq.d:/etc/dnsmasq.d
       # List with own hosts entries (eg. for wpad / proxy autocnfig)
-      - $WS_DOCKER/pihole/etc/pihole/lan.list:/etc/pihole/lan.list
+      #- $STACK_CONF/pihole/etc/pihole/lan.list:/etc/pihole/lan.list
       # This files sources the lan.list
-      - $WS_DOCKER/pihole/etc/dnsmasq.d/02-lan.conf:/etc/dnsmasq.d/02-lan.conf
+      #- $STACK_CONF/pihole/etc/dnsmasq.d/02-lan.conf:/etc/dnsmasq.d/02-lan.conf
+    cap_add:
+      - CAP_NET_ADMIN
+      - CAP_NET_RAW
     networks:
       frontend:
       pubnet:

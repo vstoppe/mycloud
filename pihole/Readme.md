@@ -4,8 +4,10 @@
 
 # Setup
 
-The myhostname.env file containes variables for the docker-compose.yml file AND the container. Before the first use you have to link your myhostname.env file to the .env
+The container expects a pihole.env file with all settings. It is also used for the ".env" file. Copy the pihole.env.example and adjust the settings. See the link abvole for all available environment variables:
 
-./pihole> `ln -s myhostname.env .env`
+./pihole> `cp pihole.env.example pihole.env`
+
+./pihole> `ln -s pihole.env .env`
 
 The Variables in your myhostname.env have to be adjusted to your needs. A description is included.
