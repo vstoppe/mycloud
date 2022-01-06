@@ -1,16 +1,17 @@
 version: '3'
 services:
   bitwarden_rs:
-    container_name: bitwarden_rs
+    container_name: $SERVICE
     image: bitwardenrs/server:alpine
+    restart: $RESTART_POLICY
     environment:
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL
-      - LETSENCRYPT_HOST=rustbit.$DOMAIN
-      - VIRTUAL_HOST=rustbit.$DOMAIN
+      - LETSENCRYPT_HOST=rustbit.$DOMAIN_EXTERN
+      - VIRTUAL_HOST=rustbit.$DOMAIN_EXTERN
       - VIRTUAL_PORT=80
       #- NETWORK_ACCESS=internal
     volumes:
-      - $DATA/bitwarden_rs/:/data
+      - $STACK_DATA/$SERVICE/:/data
     networks:
       frontend:
 
