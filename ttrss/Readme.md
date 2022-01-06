@@ -4,9 +4,8 @@ TT-RSS is an amazing lightwight news reader. This configuration uses the image [
 
 # Setup
 
-* `cp myhostname.env $HOSTNAME.env`
-* customize the config for your needs: `vim $MYHOSTNAME.env`
-* Link the .env file: `ln -s $MYHOSTNAME .env`
+* `cp example.env .env`
+* customize the config for your needs: `vim .env`
 * `docker-compose up`
 
 
