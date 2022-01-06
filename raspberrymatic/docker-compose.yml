@@ -1,0 +1,35 @@
+version: "3.3"
+services:
+  raspberrymatic:
+    image: ghcr.io/jens-maus/raspberrymatic:latest
+    container_name: $SERVICE
+    hostname: $SERVICE
+    privileged: true
+    restart: $RESTART_POLICY
+    stop_grace_period: 30s
+    environment:
+      - SELF_SIGNED_HOST=$SERVICE.$LOCAL_DOMAIN
+      - VIRTUAL_HOST=$SERVICE.$LOCAL_DOMAIN
+      - VIRTUAL_PORT=80
+    volumes:
+      - $STACK_DATA/$SERVICE:/usr/local:rw
+      - /lib/modules:/lib/modules:ro
+      - /run/udev/control:/run/udev/control
+    ports:
+      - "80:80"
+      - "2001:2001"
+      - "2010:2010"
+      - "9292:9292"
+      - "8181:8181"
+    networks:
+      frontend:
+      pubnet:
+        ipv4_address: $IP_RASPIMATIC
+
+networks:
+  frontend:
+    external:
+      name: frontend
+  pubnet:
+    external:
+      name: pub_net
