@@ -4,6 +4,7 @@ services:
     container_name: pihole
     hostname: pihole
     image: pihole/pihole:latest
+    restart: $RESTART_POLICY
     env_file:
       - pihole.env
     environment:
