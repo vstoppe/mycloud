@@ -2,17 +2,19 @@ version: '3'
 services:
   # Source: https://hub.docker.com/r/mazzolino/tiddlywiki
   tiddlywiki:
-    container_name: tiddlywiki
+    container_name: $SERVICE
     image: mazzolino/tiddlywiki
-    env_file:
-      - tiddlywiki.env
+    restart: $RESTART_POLICY
     environment:
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL
-      - LETSENCRYPT_HOST=$SUBDOMAIN.$DOMAIN
-      - VIRTUAL_HOST=$SUBDOMAIN.$DOMAIN
+      - LETSENCRYPT_HOST=$SUBDOMAIN.$DOMAIN_EXTERN
+      - VIRTUAL_HOST=$SUBDOMAIN.$DOMAIN_EXTERN
       - VIRTUAL_PORT=8080
+      # Tiddlywiki specific variables:
+      - USER=$USER
+      - PASSWORD=$PASSWORD
     volumes:
-      - $DATA/tiddlywiki:/var/lib/tiddlywiki
+      - $STACK_DATA/$SERVICE:/var/lib/tiddlywiki
     networks:
       - frontend
 
