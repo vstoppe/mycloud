@@ -3,9 +3,9 @@ Power up wallabag
 
 # Setup
 
-    cp wallabag.example.env wallabag.env
+    cp example.env .env
 
-Customize the wallabag.env to your needs.
+Customize the .env file to your needs.
 
 Start the wallabag stack:
 
