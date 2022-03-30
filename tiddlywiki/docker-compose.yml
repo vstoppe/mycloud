@@ -3,7 +3,8 @@ services:
   # Source: https://hub.docker.com/r/mazzolino/tiddlywiki
   tiddlywiki:
     container_name: $SERVICE
-    image: mazzolino/tiddlywiki
+    #image: mazzolino/tiddlywiki
+    image: m0wer/tiddlywiki
     restart: $RESTART_POLICY
     environment:
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL

@@ -2,7 +2,7 @@ version: '3'
 services:
   bitwarden_rs:
     container_name: $SERVICE
-    image: bitwardenrs/server:alpine
+    image:  vaultwarden/server:alpine
     restart: $RESTART_POLICY
     environment:
       - LETSENCRYPT_EMAIL=$ADMIN_MAIL
