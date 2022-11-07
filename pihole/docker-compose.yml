@@ -5,8 +5,8 @@ services:
     hostname: pihole
     image: pihole/pihole:latest
     restart: $RESTART_POLICY
-    env_file:
-      - pihole.env
+    #    env_file:
+    #  - pihole.env
     environment:
       # Without DNSMASQ_LISTENING=all dnsmasq does not answer to dns requests
       - DNSMASQ_LISTENING=all
@@ -16,6 +16,23 @@ services:
       # We want this service not be accessible from the internet:
       - NETWORK_ACCESS=internal
       - PIHOLE_DOMAIN=$LOCAL_DOMAIN
+      # Pihole specific variables:
+      - CONDITIONAL_FORWARDING=$REV_SERVER
+      - CONDITIONAL_FORWARDING_DOMAIN=$REV_SERVER_DOMAIN
+      - CONDITIONAL_FORWARDING_IP=$REV_SERVER_TARGET
+      - CONDITIONAL_FORWARDING_REVERSE=$REV_SERVER_CIDR
+      - DHCP_ACTIVE=$DHCP_ACTIVE
+      - DHCP_START=$DHCP_START
+      - DHCP_END=$DHCP_END
+      - DHCP_ROUTER=$DHCP_ROUTER
+      - DHCP_IPv6=$DHCP_IPv6
+      - IPv6=$IPv6
+      - DNS1=$DNS1
+      - DNS2=$DNS2
+      - DNSSEC=$DNSSEC
+      - FTLCONF_LOCAL_IPV4=$FTLCONF_REPLY_ADDR4
+      - TZ=$TZ
+      - WEBPASSWORD=$WEBPASSWORD
     volumes:
       - $STACK_DATA/pihole/etc:/etc/pihole
       - $STACK_DATA/pihole/dnsmasq.d:/etc/dnsmasq.d
