@@ -1,5 +1,13 @@
 version: '3'
 services:
+  unbound:
+    container_name: unbound
+    hostname: unbound
+    image: mvance/unbound:latest
+    restart: $RESTART_POLICY
+    networks:
+      pubnet:
+        ipv4_address: $UnboundIP
   pihole:
     container_name: pihole
     hostname: pihole
