@@ -1,0 +1,7 @@
+  news-updater:
+    #build: ./news-updater
+    build: .
+    environment:
+      NEXTCLOUD_URL: $URL
+      NEXTCLOUD_ADMIN_USER: $USER
+      NEXTCLOUD_ADMIN_PASSWORD: $PASSWORD
